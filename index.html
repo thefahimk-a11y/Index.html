@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Go Up India</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- PREMIUM THEME --- */
+        :root {
+            --bg-dark: #000000;
+            --glass: rgba(30, 30, 30, 0.6);
+            --border: rgba(255, 255, 255, 0.15);
+            --text: #ffffff;
+            --accent: #ff0050; /* TikTok/Insta Red */
+            --gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            --input-bg: rgba(255,255,255,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-dark); color: var(--text); height: 100vh; overflow: hidden; }
+        .hidden { display: none !important; }
+
+        /* --- LAYOUT --- */
+        .app-window { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
+        .content-area { flex: 1; overflow-y: auto; scroll-behavior: smooth; padding-bottom: 90px; }
+
+        /* HEADER */
+        .glass-header {
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border);
+        }
+        .app-title { font-size: 22px; font-weight: 700; background: -webkit-linear-gradient(0deg, #fff, #ccc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* --- STORIES BAR (FIXED) --- */
+        .stories-container {
+            display: flex; gap: 15px; padding: 15px; overflow-x: auto;
+            border-bottom: 1px solid var(--border); scrollbar-width: none; background: #000;
+        }
+        .story-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; min-width: 65px; }
+        .story-ring {
+            width: 65px; height: 65px; border-radius: 50%; padding: 3px;
+            background: var(--gradient); position: relative;
+        }
+        .story-img {
+            width: 100%; height: 100%; border-radius: 50%;
+            border: 3px solid black; object-fit: cover; background: #333;
+        }
+        .story-name { font-size: 11px; color: #ccc; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .story-add-icon {
+            position: absolute; bottom: 0; right: 0; background: var(--accent); color: white;
+            width: 20px; height: 20px; border-radius: 50%; border: 2px solid black;
+            display: flex; align-items: center; justify-content: center; font-size: 12px;
+        }
+
+        /* --- POST CARD --- */
+        .home-post-card { margin: 0; border-bottom: 1px solid var(--border); padding-bottom: 15px; background: black; }
+        .hp-header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; }
+        .hp-avatar { width: 35px; height: 35px; border-radius: 50%; background: #333; overflow: hidden; }
+        .hp-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .hp-img { width: 100%; max-height: 500px; object-fit: contain; background: #111; }
+        .hp-actions { padding: 10px 15px; display: flex; justify-content: space-between; font-size: 24px; }
+        .left-actions { display: flex; gap: 20px; }
+        .hp-caption { padding: 0 15px; font-size: 14px; }
+
+        /* --- AUTH SCREEN --- */
+        #auth-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 5000;
+            display: flex; flex-direction: column; justify-content: center; padding: 30px;
+        }
+        .auth-step { display: none; flex-direction: column; width: 100%; animation: fadeIn 0.4s ease; }
+        .auth-step.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-glass { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: white; font-weight: bold; margin-top: 15px; font-size: 16px; cursor: pointer; }
+        .create-input { width: 100%; padding: 15px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); outline: none; margin-bottom: 15px; font-size: 14px; }
+        label { font-size: 12px; color: #aaa; margin-left: 5px; margin-bottom: 5px; display: block; }
+
+        /* --- REELS --- */
+        #tab-feed { background: black; height: 100%; scroll-snap-type: y mandatory; overflow-y: scroll; padding: 0; }
+        .feed-post { width: 100%; height: 100%; scroll-snap-align: start; position: relative; background: #000; display: flex; justify-content: center; align-items: center; }
+        .video-full { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* --- NAV --- */
+        .floating-nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; height: 65px;
+            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(20px);
+            border: 1px solid var(--border); border-radius: 35px;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .nav-icon { font-size: 24px; color: #888; transition: 0.3s; }
+        .nav-icon.active { color: white; }
+        .nav-plus { width: 50px; height: 50px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; margin-top: -20px; box-shadow: 0 0 15px var(--accent); }
+
+        /* --- LOADING --- */
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #333; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* PROFILE GRID */
+        .p-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; } .p-grid-item { aspect-ratio: 1/1; background: #111; position: relative; } .p-grid-img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+
+    <div id="loading-overlay"><div class="spinner"></div></div>
+
+    <div id="auth-screen">
+        <div id="step-1" class="auth-step active">
+            <h1 style="text-align:center;margin-bottom:10px;">Go Up India</h1>
+            <p style="text-align:center;color:gray;margin-bottom:30px;">Login to continue</p>
+            <input type="email" id="login-email" class="create-input" placeholder="Email Address">
+            <input type="password" id="login-pass" class="create-input" placeholder="Password">
+            <button class="btn-glass" onclick="handleLogin()">Login</button>
+            <button class="btn-glass" style="background:transparent; border:1px solid var(--border);" onclick="goToStep(2)">Create New Account</button>
+        </div>
+
+        <div id="step-2" class="auth-step">
+            <h2 style="text-align:center;margin-bottom:20px;">About You</h2>
+            <label>First Name</label><input type="text" id="reg-fname" class="create-input" placeholder="First Name">
+            <label>Last Name</label><input type="text" id="reg-lname" class="create-input" placeholder="Last Name">
+            <label>Date of Birth</label><input type="date" id="reg-dob" class="create-input" style="color-scheme:dark;">
+            <button class="btn-glass" onclick="handleStep2()">Next</button>
+            <p style="text-align:center;margin-top:20px;color:gray;" onclick="goToStep(1)">Back</p>
+        </div>
+
+        <div id="step-3" class="auth-step">
+            <h2 style="text-align:center;margin-bottom:20px;">Security</h2>
+            <label>Email</label><input type="email" id="reg-email" class="create-input" placeholder="Email Address">
+            <label>Password</label><input type="password" id="reg-pass" class="create-input" placeholder="Create Password">
+            <button class="btn-glass" onclick="handleStep3()">Create Account</button>
+            <p style="text-align:center;margin-top:20px;color:gray;" onclick="goToStep(2)">Back</p>
+        </div>
+
+        <div id="step-4" class="auth-step">
+            <div style="position:absolute;top:40px;right:20px;color:gray;" onclick="finishAuth()">Skip</div>
+            <h2 style="text-align:center;margin-bottom:20px;">Verify Phone</h2>
+            <div id="recaptcha-container"></div>
+            <div id="phone-box">
+                <input type="tel" id="reg-phone" class="create-input" placeholder="Phone Number">
+                <button class="btn-glass" id="btn-send-otp" onclick="sendOTP()">Send OTP</button>
+            </div>
+            <div id="otp-box" class="hidden">
+                <input type="text" id="otp-in" class="create-input" placeholder="Enter OTP">
+                <button class="btn-glass" onclick="verifyOTP()">Verify</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-app" class="app-window hidden">
+        
+        <div id="tab-home" class="content-area">
+            <div class="glass-header">
+                <div class="app-title">Go Up India</div>
+                <div style="display:flex;gap:20px;font-size:22px;"><i class="fa-regular fa-heart"></i></div>
+            </div>
+
+            <div class="stories-container">
+                <div class="story-item">
+                    <div class="story-ring" style="background:none; border:2px dashed gray;">
+                        <img id="my-story-img" class="story-img" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+                        <div class="story-add-icon"><i class="fa-solid fa-plus"></i></div>
+                    </div>
+                    <span class="story-name">You</span>
+                </div>
+                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/women/44.jpg"></div><span class="story-name">Priya</span></div>
+                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/men/32.jpg"></div><span class="story-name">Rahul</span></div>
+                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/women/65.jpg"></div><span class="story-name">Sneha</span></div>
+                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/men/85.jpg"></div><span class="story-name">Amit</span></div>
+            </div>
+
+            <div id="home-feed-stream"></div>
+        </div>
+
+        <div id="tab-feed" class="content-area hidden"></div>
+
+        <div id="tab-upload" class="content-area hidden">
+            <div class="glass-header"><div>New Post</div></div>
+            <div style="padding:20px;">
+                <input type="file" id="reel-file" class="create-input">
+                <input type="text" id="reel-cap" class="create-input" placeholder="Caption...">
+                <button class="btn-glass" onclick="uploadReel()">Upload</button>
+            </div>
+        </div>
+
+        <div id="tab-profile" class="content-area hidden">
+            <div class="glass-header"><div>Me</div><i class="fa-solid fa-right-from-bracket" onclick="logout()"></i></div>
+            <div style="text-align:center;padding:30px;">
+                <div style="width:100px;height:100px;border-radius:50%;margin:0 auto 15px;overflow:hidden;border:3px solid var(--accent);"><img id="p-img" style="width:100%;height:100%;object-fit:cover;"></div>
+                <h2 id="p-name">User Name</h2>
+                <div id="p-bio" style="font-size:13px;color:gray;">Digital Creator</div>
+            </div>
+            <div class="p-grid" id="profile-grid"></div>
+        </div>
+
+        <div class="floating-nav">
+            <div class="nav-icon active" onclick="nav('home')"><i class="fa-solid fa-house"></i></div>
+            <div class="nav-icon" onclick="nav('feed')"><i class="fa-solid fa-play"></i></div>
+            <div class="nav-plus" onclick="nav('upload')"><i class="fa-solid fa-plus"></i></div>
+            <div class="nav-icon" onclick="nav('profile')"><i class="fa-solid fa-user"></i></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const CLOUD_NAME = "dsaig3mfp"; const UPLOAD_PRESET = "Md_Fahim9p"; 
+        const firebaseConfig = { apiKey: "AIzaSyD6HGw4Id9w5T_ypTgy4X2MXHNn8pWwzRg", authDomain: "thefhm-dfa77.firebaseapp.com", projectId: "thefhm-dfa77", storageBucket: "thefhm-dfa77.firebasestorage.app", messagingSenderId: "737456266104", appId: "1:737456266104:web:f1d51facaeb957ebca068d", measurementId: "G-0GPC1PCJNF" };
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+        
+        let user = null; let tempRegData = {}; let confirmationResult = null;
+        const DEFAULT_IMG = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        onAuthStateChanged(auth, async (u) => {
+            document.getElementById('loading-overlay').classList.add('hidden');
+            if(u) {
+                user = u;
+                const snap = await getDoc(doc(db, "users", u.uid));
+                if(snap.exists()) {
+                    if(snap.data().isVerified) showApp(snap.data());
+                    else { document.getElementById('auth-screen').style.display='flex'; goToStep(4); setupRecaptcha(); }
+                } else signOut(auth);
+            } else {
+                document.getElementById('auth-screen').style.display='flex'; goToStep(1);
+            }
+        });
+
+        window.goToStep = (n) => { document.querySelectorAll('.auth-step').forEach(e=>e.classList.remove('active')); document.getElementById('step-'+n).classList.add('active'); }
+
+        // AUTH FUNCTIONS
+        window.handleLogin = async () => {
+            const e=document.getElementById('login-email').value, p=document.getElementById('login-pass').value;
+            if(!e||!p) return alert("Enter details");
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            try { await signInWithEmailAndPassword(auth,e,p); } catch(e){ alert(e.message); document.getElementById('loading-overlay').classList.add('hidden'); }
+        }
+
+        window.handleStep2 = () => {
+            const f=document.getElementById('reg-fname').value, l=document.getElementById('reg-lname').value, d=document.getElementById('reg-dob').value;
+            if(!f||!l||!d) return alert("Fill all details");
+            tempRegData={f,l,d}; goToStep(3);
+        }
+
+        window.handleStep3 = async () => {
+            const e=document.getElementById('reg-email').value, p=document.getElementById('reg-pass').value;
+            if(!e||!p) return alert("Enter details");
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            try {
+                const c = await createUserWithEmailAndPassword(auth,e,p);
+                const name = `${tempRegData.f} ${tempRegData.l}`;
+                await setDoc(doc(db,"users",c.user.uid), { displayName:name, firstName:tempRegData.f, lastName:tempRegData.l, dob:tempRegData.d, email:e, photoURL:"", isVerified:false, createdAt:Date.now() });
+                await updateProfile(c.user,{displayName:name});
+            } catch(e){ alert(e.message); document.getElementById('loading-overlay').classList.add('hidden'); }
+        }
+
+        function setupRecaptcha() { if(!window.recaptchaVerifier) window.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha-container',{'size':'invisible'}); }
+        window.sendOTP = async () => {
+            let ph = document.getElementById('reg-phone').value;
+            if(!ph) return alert("Enter Phone");
+            if(!ph.includes('+')) ph='+91'+ph;
+            try {
+                const appVerifier = window.recaptchaVerifier;
+                confirmationResult = await signInWithPhoneNumber(auth, ph, appVerifier);
+                document.getElementById('otp-box').classList.remove('hidden');
+                document.getElementById('btn-send-otp').style.display='none';
+                alert("OTP Sent!");
+            } catch(e){ alert("Error: "+e.message); }
+        }
+        window.verifyOTP = async () => {
+            const code = document.getElementById('otp-in').value;
+            try { await confirmationResult.confirm(code); finishAuth(); } catch(e){ alert("Wrong OTP"); }
+        }
+        window.finishAuth = async () => {
+            await updateDoc(doc(db,"users",user.uid),{isVerified:true}); location.reload();
+        }
+
+        // APP LOGIC
+        function showApp(d){
+            document.getElementById('auth-screen').style.display='none';
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('p-name').innerText = d.displayName;
+            document.getElementById('p-img').src = d.photoURL || DEFAULT_IMG;
+            document.getElementById('my-story-img').src = d.photoURL || DEFAULT_IMG;
+            loadHome(); loadReels(); loadMyProfile();
+        }
+        window.nav = (t) => {
+            document.querySelectorAll('.content-area').forEach(e=>e.classList.add('hidden'));
+            document.getElementById('tab-'+t).classList.remove('hidden');
+        }
+        window.logout = () => signOut(auth).then(()=>location.reload());
+
+        async function loadHome(){
+            const b=document.getElementById('home-feed-stream'); b.innerHTML="";
+            const s=await getDocs(query(collection(db,"posts"),orderBy("timestamp","desc")));
+            s.forEach(d=>{ if(d.data().type==='home') b.innerHTML+=`<div class="home-post-card"><div class="hp-header"><div class="hp-avatar"><img src="${d.data().avatar||DEFAULT_IMG}"></div><b>${d.data().name}</b></div><img src="${d.data().mediaUrl}" class="hp-img"><div class="hp-actions"><div class="left-actions"><i class="fa-regular fa-heart"></i></div></div><div class="hp-caption"><b>${d.data().name}</b> ${d.data().caption||""}</div></div>`; });
+        }
+        async function loadReels(){
+            const b=document.getElementById('tab-feed'); b.innerHTML="";
+            const s=await getDocs(query(collection(db,"posts"),orderBy("timestamp","desc")));
+            s.forEach(d=>{ if(d.data().type==='reel') b.innerHTML+=`<div class="feed-post"><video src="${d.data().mediaUrl}" class="video-full" controls></video></div>`; });
+        }
+        async function loadMyProfile(){
+            const g=document.getElementById('profile-grid'); g.innerHTML="";
+            const s=await getDocs(query(collection(db,"posts"),where("uid","==",user.uid)));
+            s.forEach(d=>{ g.innerHTML+=`<div class="p-grid-item"><img src="${d.data().mediaUrl}" class="p-grid-img"></div>`; });
+        }
+        window.uploadReel=async()=>{
+            const f=document.getElementById('reel-file').files[0], cap=document.getElementById('reel-cap').value;
+            if(!f) return alert("Select File");
+            const fd=new FormData(); fd.append("file",f); fd.append("upload_preset",UPLOAD_PRESET);
+            const type = f.type.startsWith('image') ? 'home' : 'reel';
+            const endpoint = f.type.startsWith('image') ? 'image' : 'video';
+            const x=new XMLHttpRequest(); x.open("POST",`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${endpoint}/upload`,true);
+            x.onload=async()=>{
+                if(x.status===200){
+                    const r=JSON.parse(x.responseText);
+                    await addDoc(collection(db,"posts"),{uid:user.uid,name:user.displayName,avatar:user.photoURL||DEFAULT_IMG,type:type,caption:cap,mediaUrl:r.secure_url,timestamp:Date.now()});
+                    alert("Uploaded!"); location.reload();
+                }
+            }; x.send(fd);
+        }
+    </script>
+</body>
+</html>
