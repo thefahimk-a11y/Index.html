@@ -2,331 +2,264 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Go Up India</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    
     <style>
-        /* --- PREMIUM THEME --- */
-        :root {
-            --bg-dark: #000000;
-            --glass: rgba(30, 30, 30, 0.6);
-            --border: rgba(255, 255, 255, 0.15);
-            --text: #ffffff;
-            --accent: #ff0050; /* TikTok/Insta Red */
-            --gradient: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            --input-bg: rgba(255,255,255,0.1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg-dark); color: var(--text); height: 100vh; overflow: hidden; }
-        .hidden { display: none !important; }
-
-        /* --- LAYOUT --- */
-        .app-window { width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; }
-        .content-area { flex: 1; overflow-y: auto; scroll-behavior: smooth; padding-bottom: 90px; }
-
-        /* HEADER */
-        .glass-header {
-            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
-            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
-            position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--border);
-        }
-        .app-title { font-size: 22px; font-weight: 700; background: -webkit-linear-gradient(0deg, #fff, #ccc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* --- STORIES BAR (FIXED) --- */
-        .stories-container {
-            display: flex; gap: 15px; padding: 15px; overflow-x: auto;
-            border-bottom: 1px solid var(--border); scrollbar-width: none; background: #000;
-        }
-        .story-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; min-width: 65px; }
-        .story-ring {
-            width: 65px; height: 65px; border-radius: 50%; padding: 3px;
-            background: var(--gradient); position: relative;
-        }
-        .story-img {
-            width: 100%; height: 100%; border-radius: 50%;
-            border: 3px solid black; object-fit: cover; background: #333;
-        }
-        .story-name { font-size: 11px; color: #ccc; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .story-add-icon {
-            position: absolute; bottom: 0; right: 0; background: var(--accent); color: white;
-            width: 20px; height: 20px; border-radius: 50%; border: 2px solid black;
-            display: flex; align-items: center; justify-content: center; font-size: 12px;
-        }
-
-        /* --- POST CARD --- */
-        .home-post-card { margin: 0; border-bottom: 1px solid var(--border); padding-bottom: 15px; background: black; }
-        .hp-header { padding: 10px 15px; display: flex; align-items: center; gap: 10px; }
-        .hp-avatar { width: 35px; height: 35px; border-radius: 50%; background: #333; overflow: hidden; }
-        .hp-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .hp-img { width: 100%; max-height: 500px; object-fit: contain; background: #111; }
-        .hp-actions { padding: 10px 15px; display: flex; justify-content: space-between; font-size: 24px; }
-        .left-actions { display: flex; gap: 20px; }
-        .hp-caption { padding: 0 15px; font-size: 14px; }
+        /* --- GLOBAL RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #0f0c29; color: white; height: 100vh; width: 100vw; overflow: hidden; user-select: none; }
 
         /* --- AUTH SCREEN --- */
-        #auth-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 5000;
-            display: flex; flex-direction: column; justify-content: center; padding: 30px;
-        }
-        .auth-step { display: none; flex-direction: column; width: 100%; animation: fadeIn 0.4s ease; }
-        .auth-step.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #auth-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f0c29; z-index: 5000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        .auth-card { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 20px; width: 90%; max-width: 380px; text-align: center; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(15px); }
+        .auth-input { width: 100%; padding: 12px; margin: 8px 0; background: #1a1a2e; border: 1px solid #333; color: white; border-radius: 8px; outline: none; }
+        .auth-btn { width: 100%; padding: 12px; margin-top: 10px; background: linear-gradient(45deg, #ff0050, #00f2ea); border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
+        .auth-btn-outline { background: transparent; border: 1px solid #555; margin-top: 10px; color: #ccc; }
+        .step { display: none; } .step.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .btn-glass { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 12px; color: white; font-weight: bold; margin-top: 15px; font-size: 16px; cursor: pointer; }
-        .create-input { width: 100%; padding: 15px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); outline: none; margin-bottom: 15px; font-size: 14px; }
-        label { font-size: 12px; color: #aaa; margin-left: 5px; margin-bottom: 5px; display: block; }
+        /* Tabs for Auth */
+        .auth-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { background: transparent; border: none; color: #666; font-size: 16px; cursor: pointer; padding-bottom: 5px; }
+        .tab-btn.active { color: #00f2ea; border-bottom: 2px solid #00f2ea; }
 
-        /* --- REELS --- */
-        #tab-feed { background: black; height: 100%; scroll-snap-type: y mandatory; overflow-y: scroll; padding: 0; }
-        .feed-post { width: 100%; height: 100%; scroll-snap-align: start; position: relative; background: #000; display: flex; justify-content: center; align-items: center; }
-        .video-full { width: 100%; height: 100%; object-fit: cover; }
+        /* --- DASHBOARD --- */
+        #dashboard-container { display: none; width: 100%; height: 100%; background: #0f0c29; flex-direction: column; }
+        .neo-header { height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(15,12,41,0.95); border-bottom: 1px solid #333; flex-shrink: 0; z-index: 100; }
+        .yt-btn { background: #ff0000; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+        #feedArea { flex: 1; overflow-y: auto; padding: 10px; padding-bottom: 90px; }
+        .glass-card { background: rgba(255,255,255,0.03); border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; overflow: hidden; }
+        .post-media { width: 100%; max-height: 400px; object-fit: cover; background: #000; }
+        .liked-red { color: #ff0050; }
+
+        #reels-container { display: none; width: 100%; height: 100%; background: #000; overflow-y: scroll; scroll-snap-type: y mandatory; padding-bottom: 80px; }
+        .reel-item { width: 100%; height: 100vh; scroll-snap-align: start; position: relative; background: #000; display: flex; justify-content: center; align-items: center; }
+        .reel-video { width: 100%; height: 100%; object-fit: cover; }
+
+        .glass-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 92%; height: 65px; background: rgba(20, 20, 30, 0.95); border-radius: 40px; border: 1px solid #333; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-item { font-size: 22px; color: #666; cursor: pointer; }
+        .nav-item.active { color: #00f2ea; }
+        .upload-orb { width: 52px; height: 52px; background: linear-gradient(45deg, #ff0050, #00f2ea); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 26px; color: white; transform: translateY(-15px); border: 3px solid #0f0c29; }
+
+        /* Youtube & Player */
+        .yt-search-box { display: flex; gap: 10px; padding: 10px; background: #151520; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid #333; }
+        .yt-input { flex: 1; padding: 10px; border-radius: 20px; border: none; background: #2a2a35; color: white; outline: none; }
+        .yt-search-btn { width: 40px; height: 40px; border-radius: 50%; background: #333; display: flex; justify-content: center; align-items: center; cursor: pointer; color: #00f2ea; }
+        .yt-video-flat { display: flex; background: #1a1a2e; margin-bottom: 10px; padding: 10px; border-radius: 12px; cursor: pointer; transition: 0.2s; border: 1px solid #333; }
+        .yt-thumb { width: 120px; height: 70px; border-radius: 8px; object-fit: cover; background: #000; flex-shrink: 0; }
+        .yt-info { margin-left: 10px; display: flex; flex-direction: column; justify-content: center; }
         
-        /* --- NAV --- */
-        .floating-nav {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; height: 65px;
-            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(20px);
-            border: 1px solid var(--border); border-radius: 35px;
-            display: flex; justify-content: space-around; align-items: center;
-            z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .nav-icon { font-size: 24px; color: #888; transition: 0.3s; }
-        .nav-icon.active { color: white; }
-        .nav-plus { width: 50px; height: 50px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; margin-top: -20px; box-shadow: 0 0 15px var(--accent); }
+        #playerModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 7000; flex-direction: column; }
+        .player-frame { width: 100%; aspect-ratio: 16/9; background: #000; }
+        .player-iframe { width: 100%; height: 100%; border: none; }
+        .player-close { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 8000; }
 
-        /* --- LOADING --- */
-        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        .spinner { width: 40px; height: 40px; border: 4px solid #333; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* PROFILE GRID */
-        .p-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; } .p-grid-item { aspect-ratio: 1/1; background: #111; position: relative; } .p-grid-img { width: 100%; height: 100%; object-fit: cover; }
+        .full-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f0c29; z-index: 6000; flex-direction: column; }
+        .modal-body { flex: 1; overflow-y: auto; padding: 10px; }
+        .modal-top { padding: 15px; display: flex; justify-content: space-between; align-items: center; background: #1a1a2e; border-bottom: 1px solid #333; }
+        
+        .header-avatar-circle { width: 35px; height: 35px; border-radius: 50%; background: #555; overflow: hidden; border: 1px solid #fff; }
+        .header-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .big-avatar { width: 100px; height: 100px; border-radius: 50%; background: #333; margin: 0 auto; overflow: hidden; border: 3px solid #00f2ea; display: flex; justify-content: center; align-items: center; font-size: 40px; }
+        .big-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-menu-btn { width: 100%; padding: 15px; margin-bottom: 10px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #333; border-top: 4px solid #00f2ea; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="loading-overlay"><div class="spinner"></div></div>
-
-    <div id="auth-screen">
-        <div id="step-1" class="auth-step active">
-            <h1 style="text-align:center;margin-bottom:10px;">Go Up India</h1>
-            <p style="text-align:center;color:gray;margin-bottom:30px;">Login to continue</p>
-            <input type="email" id="login-email" class="create-input" placeholder="Email Address">
-            <input type="password" id="login-pass" class="create-input" placeholder="Password">
-            <button class="btn-glass" onclick="handleLogin()">Login</button>
-            <button class="btn-glass" style="background:transparent; border:1px solid var(--border);" onclick="goToStep(2)">Create New Account</button>
-        </div>
-
-        <div id="step-2" class="auth-step">
-            <h2 style="text-align:center;margin-bottom:20px;">About You</h2>
-            <label>First Name</label><input type="text" id="reg-fname" class="create-input" placeholder="First Name">
-            <label>Last Name</label><input type="text" id="reg-lname" class="create-input" placeholder="Last Name">
-            <label>Date of Birth</label><input type="date" id="reg-dob" class="create-input" style="color-scheme:dark;">
-            <button class="btn-glass" onclick="handleStep2()">Next</button>
-            <p style="text-align:center;margin-top:20px;color:gray;" onclick="goToStep(1)">Back</p>
-        </div>
-
-        <div id="step-3" class="auth-step">
-            <h2 style="text-align:center;margin-bottom:20px;">Security</h2>
-            <label>Email</label><input type="email" id="reg-email" class="create-input" placeholder="Email Address">
-            <label>Password</label><input type="password" id="reg-pass" class="create-input" placeholder="Create Password">
-            <button class="btn-glass" onclick="handleStep3()">Create Account</button>
-            <p style="text-align:center;margin-top:20px;color:gray;" onclick="goToStep(2)">Back</p>
-        </div>
-
-        <div id="step-4" class="auth-step">
-            <div style="position:absolute;top:40px;right:20px;color:gray;" onclick="finishAuth()">Skip</div>
-            <h2 style="text-align:center;margin-bottom:20px;">Verify Phone</h2>
-            <div id="recaptcha-container"></div>
-            <div id="phone-box">
-                <input type="tel" id="reg-phone" class="create-input" placeholder="Phone Number">
-                <button class="btn-glass" id="btn-send-otp" onclick="sendOTP()">Send OTP</button>
-            </div>
-            <div id="otp-box" class="hidden">
-                <input type="text" id="otp-in" class="create-input" placeholder="Enter OTP">
-                <button class="btn-glass" onclick="verifyOTP()">Verify</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="main-app" class="app-window hidden">
-        
-        <div id="tab-home" class="content-area">
-            <div class="glass-header">
-                <div class="app-title">Go Up India</div>
-                <div style="display:flex;gap:20px;font-size:22px;"><i class="fa-regular fa-heart"></i></div>
+    <div id="auth-container">
+        <div class="auth-card">
+            <h2 style="color:#00f2ea; margin-bottom:20px;">GO UP INDIA</h2>
+            
+            <div class="auth-tabs" id="authTabs">
+                <button class="tab-btn active" onclick="switchAuthMode('email')">Email</button>
+                <button class="tab-btn" onclick="switchAuthMode('phone')">Phone</button>
             </div>
 
-            <div class="stories-container">
-                <div class="story-item">
-                    <div class="story-ring" style="background:none; border:2px dashed gray;">
-                        <img id="my-story-img" class="story-img" src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
-                        <div class="story-add-icon"><i class="fa-solid fa-plus"></i></div>
-                    </div>
-                    <span class="story-name">You</span>
+            <div id="emailFlow">
+                <div id="stepLanding" class="step active">
+                    <button class="auth-btn" onclick="showStep('Login')">Login with Email</button>
+                    <button class="auth-btn auth-btn-outline" style="border-color:#00f2ea; color:#00f2ea;" onclick="showStep(1)">Create Account</button>
                 </div>
-                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/women/44.jpg"></div><span class="story-name">Priya</span></div>
-                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/men/32.jpg"></div><span class="story-name">Rahul</span></div>
-                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/women/65.jpg"></div><span class="story-name">Sneha</span></div>
-                <div class="story-item"><div class="story-ring"><img class="story-img" src="https://randomuser.me/api/portraits/men/85.jpg"></div><span class="story-name">Amit</span></div>
+                <div id="stepLogin" class="step">
+                    <input type="email" id="loginEmail" class="auth-input" placeholder="Email">
+                    <input type="password" id="loginPass" class="auth-input" placeholder="Password">
+                    <button class="auth-btn" id="loginBtn" onclick="doLogin(this)">Login</button>
+                    <button class="auth-btn auth-btn-outline" onclick="showStep('Landing')">⬅️ Back</button>
+                </div>
+                <div id="step1" class="step"><input type="text" id="fname" class="auth-input" placeholder="Name"><button class="auth-btn" onclick="nextAuthStep(2)">Next</button><button class="auth-btn auth-btn-outline" onclick="showStep('Landing')">⬅️ Back</button></div>
+                <div id="step2" class="step"><input type="date" id="dob" class="auth-input"><button class="auth-btn" onclick="nextAuthStep(3)">Next</button><button class="auth-btn auth-btn-outline" onclick="showStep(1)">⬅️ Back</button></div>
+                <div id="step3" class="step"><input type="email" id="email" class="auth-input" placeholder="Email"><input type="password" id="pass" class="auth-input" placeholder="Password"><button class="auth-btn" id="regBtn" onclick="doRegister(this)">Sign Up</button><button class="auth-btn auth-btn-outline" onclick="showStep(2)">⬅️ Back</button></div>
+                <div id="stepVerify" class="step"><h3>Check Inbox 📧</h3><button class="auth-btn" onclick="location.reload()">I Verified ✅</button><button class="auth-btn auth-btn-outline" style="border-color:#ff0050; color:#ff0050;" onclick="logout()">Wrong Email? Go Back</button></div>
             </div>
 
-            <div id="home-feed-stream"></div>
-        </div>
-
-        <div id="tab-feed" class="content-area hidden"></div>
-
-        <div id="tab-upload" class="content-area hidden">
-            <div class="glass-header"><div>New Post</div></div>
-            <div style="padding:20px;">
-                <input type="file" id="reel-file" class="create-input">
-                <input type="text" id="reel-cap" class="create-input" placeholder="Caption...">
-                <button class="btn-glass" onclick="uploadReel()">Upload</button>
+            <div id="phoneFlow" style="display:none;">
+                <div id="stepPhoneInput" class="step active">
+                    <input type="tel" id="phoneNumber" class="auth-input" placeholder="+91 9999999999">
+                    <div id="recaptcha-container"></div>
+                    <button class="auth-btn" id="sendOtpBtn" onclick="sendOTP()">Send OTP</button>
+                </div>
+                <div id="stepOtpInput" class="step">
+                    <input type="text" id="otpCode" class="auth-input" placeholder="Enter 6-digit OTP">
+                    <button class="auth-btn" onclick="verifyOTP()">Verify OTP</button>
+                    <button class="auth-btn auth-btn-outline" onclick="showPhoneStep('PhoneInput')">⬅️ Change Number</button>
+                </div>
             </div>
-        </div>
-
-        <div id="tab-profile" class="content-area hidden">
-            <div class="glass-header"><div>Me</div><i class="fa-solid fa-right-from-bracket" onclick="logout()"></i></div>
-            <div style="text-align:center;padding:30px;">
-                <div style="width:100px;height:100px;border-radius:50%;margin:0 auto 15px;overflow:hidden;border:3px solid var(--accent);"><img id="p-img" style="width:100%;height:100%;object-fit:cover;"></div>
-                <h2 id="p-name">User Name</h2>
-                <div id="p-bio" style="font-size:13px;color:gray;">Digital Creator</div>
-            </div>
-            <div class="p-grid" id="profile-grid"></div>
-        </div>
-
-        <div class="floating-nav">
-            <div class="nav-icon active" onclick="nav('home')"><i class="fa-solid fa-house"></i></div>
-            <div class="nav-icon" onclick="nav('feed')"><i class="fa-solid fa-play"></i></div>
-            <div class="nav-plus" onclick="nav('upload')"><i class="fa-solid fa-plus"></i></div>
-            <div class="nav-icon" onclick="nav('profile')"><i class="fa-solid fa-user"></i></div>
         </div>
     </div>
+
+    <div id="dashboard-container">
+        <div class="neo-header">
+            <div class="yt-btn" onclick="openYouTube()"><i class="fa-brands fa-youtube"></i> Search</div>
+            <h3 style="color:#00f2ea; margin:0;">Feed</h3>
+            <div id="headerAvatar" class="header-avatar-circle" onclick="openProfile()">U</div>
+        </div>
+        <div id="feedArea"></div>
+    </div>
+
+    <div id="reels-container"></div>
+
+    <div class="glass-nav" id="navBar" style="display:none;">
+        <i class="fa-solid fa-house nav-item active" id="btnHome" onclick="switchTab('home')"></i>
+        <i class="fa-brands fa-google-play nav-item" id="btnReels" onclick="switchTab('reels')"></i>
+        <div class="upload-orb" onclick="document.getElementById('mediaInput').click()">+</div>
+        <i class="fa-solid fa-bell nav-item" onclick="alert('No Notifications')"></i>
+        <i class="fa-solid fa-user nav-item" onclick="openProfile()"></i>
+    </div>
+
+    <div id="ytModal" class="full-modal" style="padding:0;">
+        <div class="modal-top"><h3 style="display:flex; align-items:center; gap:8px;"><i class="fa-brands fa-youtube" style="color:red;"></i> YouTube</h3><i class="fa-solid fa-xmark" style="font-size:24px;" onclick="document.getElementById('ytModal').style.display='none'"></i></div>
+        <div class="yt-search-box"><input type="text" id="ytSearchInput" class="yt-input" placeholder="Search..."><div class="yt-search-btn" onclick="searchYouTube()"><i class="fa-solid fa-magnifying-glass"></i></div></div>
+        <div class="modal-body" id="ytVideoList">Loading...</div>
+    </div>
+    <div id="playerModal"><div class="player-close" onclick="closePlayer()"><i class="fa-solid fa-xmark" style="color:white; font-size:20px;"></i></div><div class="player-frame"><iframe id="mainPlayerFrame" class="player-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><div style="padding:15px; color:white;"><h3 id="playerTitle" style="font-size:16px;">Video Title</h3><p id="playerChannel" style="color:#aaa; font-size:12px;">Channel Name</p></div></div>
+
+    <div id="myProfileModal" class="full-modal" style="padding:20px;"><div style="text-align:right;"><i class="fa-solid fa-xmark" onclick="document.getElementById('myProfileModal').style.display='none'" style="font-size:24px;"></i></div><div class="profile-header-section"><div class="big-avatar" id="myAvatarBig" onclick="document.getElementById('profilePicInput').click()">U</div><h2 id="myName">User</h2><p id="myEmail" style="color:#aaa;">...</p></div><div style="margin-top:20px;"><div class="profile-menu-btn" onclick="openInbox()"><i class="fa-solid fa-comments" style="color:#00f2ea;"></i> My Chats</div><button class="auth-btn" style="background:#ff0050; margin-top:10px;" onclick="logout()">Logout</button></div><input type="file" id="profilePicInput" style="display:none;" accept="image/*"></div>
+    <div id="inboxModal" class="full-modal"><div class="modal-top"><i class="fa-solid fa-arrow-left" onclick="document.getElementById('inboxModal').style.display='none'"></i><h3>Inbox</h3><div></div></div><div id="inboxList"></div></div>
+    <div id="chatModal" class="full-modal" style="padding:0; background:black;"><div class="modal-top"><i class="fa-solid fa-arrow-left" onclick="document.getElementById('chatModal').style.display='none'"></i><h4 id="chatUserName">User</h4></div><div id="chatMessages" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:5px;"></div><div style="padding:10px; background:#1a1a2e; display:flex; gap:10px;"><input id="msgInput" class="auth-input" style="margin:0;"><button onclick="sendMessage()" class="auth-btn" style="margin:0; width:auto;"><i class="fa-solid fa-paper-plane"></i></button></div></div>
+    <input type="file" id="mediaInput" style="display:none;" accept="image/*,video/*">
+    <div id="editor-container" class="full-modal" style="background:black; padding:20px;"><div id="previewBox" style="height:300px; background:#222; display:flex; justify-content:center; align-items:center;"></div><input id="caption" class="auth-input" placeholder="Caption..."><button class="auth-btn" onclick="uploadPost(this)">Post</button><button class="auth-btn" style="background:transparent;" onclick="document.getElementById('editor-container').style.display='none'">Cancel</button></div>
+    <div id="loader"><div class="spinner"></div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, onAuthStateChanged, signOut, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, orderBy, limit, getDocs, serverTimestamp, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const CLOUD_NAME = "dsaig3mfp"; const UPLOAD_PRESET = "Md_Fahim9p"; 
-        const firebaseConfig = { apiKey: "AIzaSyD6HGw4Id9w5T_ypTgy4X2MXHNn8pWwzRg", authDomain: "thefhm-dfa77.firebaseapp.com", projectId: "thefhm-dfa77", storageBucket: "thefhm-dfa77.firebasestorage.app", messagingSenderId: "737456266104", appId: "1:737456266104:web:f1d51facaeb957ebca068d", measurementId: "G-0GPC1PCJNF" };
+        const firebaseConfig = {
+          apiKey: "AIzaSyBx7VW1M_QLTWzlsyT6VHy_OLnh83vU4Ug",
+          authDomain: "go-up-india-674db.firebaseapp.com",
+          databaseURL: "https://go-up-india-674db-default-rtdb.firebaseio.com",
+          projectId: "go-up-india-674db",
+          storageBucket: "go-up-india-674db.firebasestorage.app",
+          messagingSenderId: "557963188738",
+          appId: "1:557963188738:web:84a6dff484315c2828e51b",
+          measurementId: "G-YJCJPXJEW9"
+        };
+        const CLOUD_NAME = "dal1ogwxl", UPLOAD_PRESET = "go_up_preset";
+        const YOUTUBE_API_KEY = "AIzaSyBtjdUuI_BcCRI75mRjnUYtuJD3TXKdJtE"; 
+
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
-        
-        let user = null; let tempRegData = {}; let confirmationResult = null;
-        const DEFAULT_IMG = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+        let currentUser=null, windowFile=null, activeChatId=null, chatUnsub=null, confirmationResult=null;
+
+        auth.languageCode = 'en'; // Force English for OTP SMS
 
         onAuthStateChanged(auth, async (u) => {
-            document.getElementById('loading-overlay').classList.add('hidden');
-            if(u) {
-                user = u;
-                const snap = await getDoc(doc(db, "users", u.uid));
-                if(snap.exists()) {
-                    if(snap.data().isVerified) showApp(snap.data());
-                    else { document.getElementById('auth-screen').style.display='flex'; goToStep(4); setupRecaptcha(); }
-                } else signOut(auth);
+            if (u) {
+                // If Phone Auth or Email Verified
+                if (u.phoneNumber || u.emailVerified) {
+                    currentUser = u;
+                    document.getElementById('auth-container').style.display = 'none';
+                    document.getElementById('navBar').style.display = 'flex';
+                    switchTab('home'); loadUserData();
+                } else {
+                    document.getElementById('auth-container').style.display = 'flex';
+                    showStep('Verify');
+                }
             } else {
-                document.getElementById('auth-screen').style.display='flex'; goToStep(1);
+                document.getElementById('auth-container').style.display = 'flex';
             }
         });
 
-        window.goToStep = (n) => { document.querySelectorAll('.auth-step').forEach(e=>e.classList.remove('active')); document.getElementById('step-'+n).classList.add('active'); }
+        // --- AUTH TABS ---
+        window.switchAuthMode = (mode) => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(mode === 'email') {
+                document.getElementById('emailFlow').style.display='block';
+                document.getElementById('phoneFlow').style.display='none';
+                document.querySelector('button[onclick="switchAuthMode(\'email\')"]').classList.add('active');
+            } else {
+                document.getElementById('emailFlow').style.display='none';
+                document.getElementById('phoneFlow').style.display='block';
+                document.querySelector('button[onclick="switchAuthMode(\'phone\')"]').classList.add('active');
+                if(!window.recaptchaVerifier) {
+                    window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible' });
+                }
+            }
+        };
 
-        // AUTH FUNCTIONS
-        window.handleLogin = async () => {
-            const e=document.getElementById('login-email').value, p=document.getElementById('login-pass').value;
-            if(!e||!p) return alert("Enter details");
-            document.getElementById('loading-overlay').classList.remove('hidden');
-            try { await signInWithEmailAndPassword(auth,e,p); } catch(e){ alert(e.message); document.getElementById('loading-overlay').classList.add('hidden'); }
-        }
+        // --- EMAIL LOGIC ---
+        window.showStep = (id) => { document.querySelectorAll('#emailFlow .step').forEach(s=>s.classList.remove('active')); document.getElementById('step'+id).classList.add('active'); };
+        window.nextAuthStep = (n) => showStep(n);
+        window.doLogin = async (btn) => { try { await signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPass').value); } catch(e){ alert(e.message); } };
+        window.doRegister = async (btn) => { try { const c = await createUserWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('pass').value); await setDoc(doc(db,"users",c.user.uid),{firstName:document.getElementById('fname').value, email:c.user.email}); await sendEmailVerification(c.user); showStep('Verify'); } catch(e){ alert(e.message); } };
 
-        window.handleStep2 = () => {
-            const f=document.getElementById('reg-fname').value, l=document.getElementById('reg-lname').value, d=document.getElementById('reg-dob').value;
-            if(!f||!l||!d) return alert("Fill all details");
-            tempRegData={f,l,d}; goToStep(3);
-        }
-
-        window.handleStep3 = async () => {
-            const e=document.getElementById('reg-email').value, p=document.getElementById('reg-pass').value;
-            if(!e||!p) return alert("Enter details");
-            document.getElementById('loading-overlay').classList.remove('hidden');
-            try {
-                const c = await createUserWithEmailAndPassword(auth,e,p);
-                const name = `${tempRegData.f} ${tempRegData.l}`;
-                await setDoc(doc(db,"users",c.user.uid), { displayName:name, firstName:tempRegData.f, lastName:tempRegData.l, dob:tempRegData.d, email:e, photoURL:"", isVerified:false, createdAt:Date.now() });
-                await updateProfile(c.user,{displayName:name});
-            } catch(e){ alert(e.message); document.getElementById('loading-overlay').classList.add('hidden'); }
-        }
-
-        function setupRecaptcha() { if(!window.recaptchaVerifier) window.recaptchaVerifier = new RecaptchaVerifier(auth,'recaptcha-container',{'size':'invisible'}); }
+        // --- PHONE LOGIC ---
+        window.showPhoneStep = (id) => { document.querySelectorAll('#phoneFlow .step').forEach(s=>s.classList.remove('active')); document.getElementById('step'+id).classList.add('active'); };
         window.sendOTP = async () => {
-            let ph = document.getElementById('reg-phone').value;
-            if(!ph) return alert("Enter Phone");
-            if(!ph.includes('+')) ph='+91'+ph;
+            const ph = document.getElementById('phoneNumber').value;
+            if(!ph) return alert("Enter Phone Number");
+            const btn = document.getElementById('sendOtpBtn'); btn.innerText="Sending...";
             try {
-                const appVerifier = window.recaptchaVerifier;
-                confirmationResult = await signInWithPhoneNumber(auth, ph, appVerifier);
-                document.getElementById('otp-box').classList.remove('hidden');
-                document.getElementById('btn-send-otp').style.display='none';
-                alert("OTP Sent!");
-            } catch(e){ alert("Error: "+e.message); }
-        }
+                confirmationResult = await signInWithPhoneNumber(auth, ph, window.recaptchaVerifier);
+                showPhoneStep('OtpInput');
+                btn.innerText="Send OTP";
+            } catch(e) { alert("Error: " + e.message); btn.innerText="Send OTP"; window.recaptchaVerifier.render().then(widgetId => grecaptcha.reset(widgetId));}
+        };
         window.verifyOTP = async () => {
-            const code = document.getElementById('otp-in').value;
-            try { await confirmationResult.confirm(code); finishAuth(); } catch(e){ alert("Wrong OTP"); }
-        }
-        window.finishAuth = async () => {
-            await updateDoc(doc(db,"users",user.uid),{isVerified:true}); location.reload();
-        }
+            const code = document.getElementById('otpCode').value;
+            try {
+                const res = await confirmationResult.confirm(code);
+                // Check if new user, save empty profile
+                const uDoc = await getDoc(doc(db, "users", res.user.uid));
+                if(!uDoc.exists()) {
+                    await setDoc(doc(db,"users",res.user.uid), { firstName: "User "+res.user.phoneNumber.slice(-4), phone: res.user.phoneNumber });
+                }
+            } catch(e) { alert("Invalid OTP"); }
+        };
 
-        // APP LOGIC
-        function showApp(d){
-            document.getElementById('auth-screen').style.display='none';
-            document.getElementById('main-app').classList.remove('hidden');
-            document.getElementById('p-name').innerText = d.displayName;
-            document.getElementById('p-img').src = d.photoURL || DEFAULT_IMG;
-            document.getElementById('my-story-img').src = d.photoURL || DEFAULT_IMG;
-            loadHome(); loadReels(); loadMyProfile();
-        }
-        window.nav = (t) => {
-            document.querySelectorAll('.content-area').forEach(e=>e.classList.add('hidden'));
-            document.getElementById('tab-'+t).classList.remove('hidden');
-        }
+        // --- CORE FEATURES ---
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+            if(tab==='home'){ document.getElementById('dashboard-container').style.display='flex'; document.getElementById('reels-container').style.display='none'; document.getElementById('btnHome').classList.add('active'); loadPosts(); }
+            else { document.getElementById('dashboard-container').style.display='none'; document.getElementById('reels-container').style.display='block'; document.getElementById('btnReels').classList.add('active'); loadReels(); }
+        };
         window.logout = () => signOut(auth).then(()=>location.reload());
 
-        async function loadHome(){
-            const b=document.getElementById('home-feed-stream'); b.innerHTML="";
-            const s=await getDocs(query(collection(db,"posts"),orderBy("timestamp","desc")));
-            s.forEach(d=>{ if(d.data().type==='home') b.innerHTML+=`<div class="home-post-card"><div class="hp-header"><div class="hp-avatar"><img src="${d.data().avatar||DEFAULT_IMG}"></div><b>${d.data().name}</b></div><img src="${d.data().mediaUrl}" class="hp-img"><div class="hp-actions"><div class="left-actions"><i class="fa-regular fa-heart"></i></div></div><div class="hp-caption"><b>${d.data().name}</b> ${d.data().caption||""}</div></div>`; });
-        }
-        async function loadReels(){
-            const b=document.getElementById('tab-feed'); b.innerHTML="";
-            const s=await getDocs(query(collection(db,"posts"),orderBy("timestamp","desc")));
-            s.forEach(d=>{ if(d.data().type==='reel') b.innerHTML+=`<div class="feed-post"><video src="${d.data().mediaUrl}" class="video-full" controls></video></div>`; });
-        }
-        async function loadMyProfile(){
-            const g=document.getElementById('profile-grid'); g.innerHTML="";
-            const s=await getDocs(query(collection(db,"posts"),where("uid","==",user.uid)));
-            s.forEach(d=>{ g.innerHTML+=`<div class="p-grid-item"><img src="${d.data().mediaUrl}" class="p-grid-img"></div>`; });
-        }
-        window.uploadReel=async()=>{
-            const f=document.getElementById('reel-file').files[0], cap=document.getElementById('reel-cap').value;
-            if(!f) return alert("Select File");
-            const fd=new FormData(); fd.append("file",f); fd.append("upload_preset",UPLOAD_PRESET);
-            const type = f.type.startsWith('image') ? 'home' : 'reel';
-            const endpoint = f.type.startsWith('image') ? 'image' : 'video';
-            const x=new XMLHttpRequest(); x.open("POST",`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/${endpoint}/upload`,true);
-            x.onload=async()=>{
-                if(x.status===200){
-                    const r=JSON.parse(x.responseText);
-                    await addDoc(collection(db,"posts"),{uid:user.uid,name:user.displayName,avatar:user.photoURL||DEFAULT_IMG,type:type,caption:cap,mediaUrl:r.secure_url,timestamp:Date.now()});
-                    alert("Uploaded!"); location.reload();
-                }
-            }; x.send(fd);
-        }
+        // YOUTUBE & POSTS & CHAT (Same as before)
+        window.openYouTube = () => { document.getElementById('ytModal').style.display='flex'; if(document.getElementById('ytVideoList').innerHTML.includes('Loading')) searchYouTube('trending india'); };
+        window.searchYouTube = async (q) => { const query = q || document.getElementById('ytSearchInput').value; if(!query) return; document.getElementById('ytVideoList').innerHTML="Loading..."; try { const r=await fetch(`https://www.googleapis.com/youtube/v3/search?key=${YOUTUBE_API_KEY}&part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=${query}`); const d=await r.json(); document.getElementById('ytVideoList').innerHTML=""; d.items.forEach(i=>{ document.getElementById('ytVideoList').innerHTML+=`<div class="yt-video-flat" onclick="openPlayer('${i.id.videoId}','${i.snippet.title.replace(/'/g,"")}','${i.snippet.channelTitle.replace(/'/g,"")}')"><img src="${i.snippet.thumbnails.high.url}" class="yt-thumb"><div class="yt-info"><h4>${i.snippet.title}</h4><p>${i.snippet.channelTitle}</p></div></div>`; }); } catch(e){ document.getElementById('ytVideoList').innerHTML="Error."; } };
+        window.openPlayer = (v,t,c) => { document.getElementById('playerModal').style.display='flex'; document.getElementById('mainPlayerFrame').src=`https://www.youtube.com/embed/${v}?autoplay=1`; document.getElementById('playerTitle').innerText=t; document.getElementById('playerChannel').innerText=c; };
+        window.closePlayer = () => { document.getElementById('playerModal').style.display='none'; document.getElementById('mainPlayerFrame').src=""; };
+
+        async function loadPosts(){ const f=document.getElementById('feedArea'); f.innerHTML=""; const s=await getDocs(query(collection(db,"posts"), orderBy("createdAt","desc"), limit(20))); s.forEach(d=>{ const p=d.data(); if(p.type==='image') f.innerHTML+=`<div class="glass-card"><div class="card-top"><b>${p.userName}</b></div><img src="${p.mediaUrl}" class="post-media"><div class="liked-red" style="padding:10px;"><i class="fa-regular fa-heart"></i> ${p.likes||0}</div><div style="padding:0 10px 10px;">${p.caption}</div></div>`; }); }
+        async function loadReels(){ const r=document.getElementById('reels-container'); r.innerHTML=""; const s=await getDocs(query(collection(db,"posts"), orderBy("createdAt","desc"), limit(20))); s.forEach(d=>{ const p=d.data(); if(p.type==='video') r.innerHTML+=`<div class="reel-item"><video src="${p.mediaUrl}" class="reel-video" controls></video></div>`; }); }
+        
+        document.getElementById('mediaInput').addEventListener('change', (e)=>{ windowFile=e.target.files[0]; if(windowFile){ document.getElementById('editor-container').style.display='flex'; const u=URL.createObjectURL(windowFile); document.getElementById('previewBox').innerHTML=windowFile.type.includes('video')?`<video src="${u}" style="max-height:100%"></video>`:`<img src="${u}" style="max-height:100%">`; } });
+        window.uploadPost = async (btn) => { btn.innerText="Uploading..."; btn.disabled=true; const fd=new FormData(); fd.append('file',windowFile); fd.append('upload_preset',UPLOAD_PRESET); const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,{method:'POST',body:fd}); const d=await r.json(); await addDoc(collection(db,"posts"),{userId:currentUser.uid, userName:document.getElementById('myName').innerText, mediaUrl:d.secure_url, type:d.resource_type, caption:document.getElementById('caption').value, createdAt:serverTimestamp(), likes:0}); location.reload(); };
+
+        async function loadUserData(){ const s=await getDoc(doc(db,"users",currentUser.uid)); if(s.exists()){ const d=s.data(); document.getElementById('myName').innerText=d.firstName || d.phone; document.getElementById('myEmail').innerText=d.email || d.phone; if(d.profilePic) {document.getElementById('headerAvatar').innerHTML=`<img src="${d.profilePic}">`; document.getElementById('myAvatarBig').innerHTML=`<img src="${d.profilePic}">`;} } }
+        window.openInbox = async () => { document.getElementById('myProfileModal').style.display='none'; document.getElementById('inboxModal').style.display='flex'; const d=document.getElementById('inboxList'); d.innerHTML="Loading..."; const q=query(collection(db,"chats"),where(`participants.${currentUser.uid}`,"==",true)); const s=await getDocs(q); d.innerHTML=""; s.forEach(doc=>{ const c=doc.data(); const oid=c.users.find(id=>id!==currentUser.uid); d.innerHTML+=`<div style="padding:15px; border-bottom:1px solid #333; cursor:pointer;" onclick="openChat('${oid}','User')"><b>Chat</b><br><span style="color:#aaa">${c.lastMessage}</span></div>`; }); };
+        window.openChat = (uid,name) => { document.getElementById('inboxModal').style.display='none'; document.getElementById('chatModal').style.display='flex'; document.getElementById('chatUserName').innerText=name; activeChatId=uid<currentUser.uid?uid+"_"+currentUser.uid:currentUser.uid+"_"+uid; if(chatUnsub) chatUnsub(); const q=query(collection(db,"chats",activeChatId,"messages"),orderBy("timestamp","asc")); chatUnsub=onSnapshot(q,(snap)=>{ const d=document.getElementById('chatMessages'); d.innerHTML=""; snap.forEach(doc=>{ const m=doc.data(); const cls=m.senderId===currentUser.uid?"align-self:flex-end; background:#005c4b;":"align-self:flex-start; background:#202c33;"; d.innerHTML+=`<div style="${cls} padding:8px 12px; border-radius:10px; max-width:70%; margin-bottom:5px;">${m.text}</div>`; }); d.scrollTop=d.scrollHeight; }); };
+        window.sendMessage = async () => { const t=document.getElementById('msgInput').value; if(!t)return; await addDoc(collection(db,"chats",activeChatId,"messages"),{senderId:currentUser.uid,text:t,timestamp:serverTimestamp()}); await setDoc(doc(db,"chats",activeChatId),{users:activeChatId.split("_"),lastMessage:t,participants:{[currentUser.uid]:true,[activeChatId.split("_").find(x=>x!==currentUser.uid)]:true}},{merge:true}); document.getElementById('msgInput').value=""; };
+        window.openProfile=()=>{document.getElementById('myProfileModal').style.display='flex'; document.getElementById('profilePicInput').addEventListener('change', async(e)=>{ const fd=new FormData(); fd.append('file',e.target.files[0]); fd.append('upload_preset',UPLOAD_PRESET); const r=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,{method:'POST',body:fd}); const d=await r.json(); await setDoc(doc(db,"users",currentUser.uid),{profilePic:d.secure_url},{merge:true}); location.reload(); }); };
     </script>
 </body>
 </html>
